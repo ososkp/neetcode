@@ -9,6 +9,7 @@ class Solution {
             while (!this.isAlphanumeric(s[r])) r--;
 
             if (s[l] !== s[r]) return false;
+
             l++;
             r--;
         }
@@ -16,7 +17,7 @@ class Solution {
     }
 
     isAlphanumeric(char) {
-        return /[A-Za-z0-9]/g.test(char);
+        return /[a-zA-Z0-9]/g.test(char)
     }
 }
 
