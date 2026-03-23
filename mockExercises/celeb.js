@@ -6,19 +6,17 @@ class Solution {
 
         let l = 0, r = matrix.length - 1;
 
-        while (l !== r) {
+        while (l < r) {
             if (knows(l, r)) l++;
             else if (knows(r, l)) r--;
         }
 
-        const candidate = l; // l and r are the same
-
         for (let i = 0; i < matrix.length; i++) {
-            if (i === candidate) continue;
-            if (knows(candidate, i) || !knows(i, candidate)) return -1;
+            if (l === i) continue;
+            if (knows(l, i) || !knows(i, l)) return -1;
         }
 
-        return candidate;
+        return l;
     }
 }
 

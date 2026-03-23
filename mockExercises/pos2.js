@@ -6,26 +6,30 @@ class Pos {
 
     buildPriceMap() {
         const stack = [this.menu];
-        let head = 0;
 
-        while (head < stack.length) {
-            const current = stack[head]
-
-            if (current.hasOwnProperty('id')) {
-                this.priceMap[Number(current['id'])] = Number(current['price']);
-            } else {
-                for (const key of Object.keys(current)) {
-                    stack.push(current[key])
+        while (stack.length > 0) {
+            const current = stack.pop();
+            for (const value of Object.values(current)) {
+                if (value.hasOwnProperty('id') && value.hasOwnProperty('price')) {
+                    this.priceMap[value.id] = Number(value.price * 100);
+                } else {
+                    stack.push(value);
                 }
             }
-            head++;
         }
+
+        console.log(this.priceMap);
     }
 
-    getPrice(itemArray) {
-        return itemArray.reduce((total, item) => {
-            return (this.priceMap[item] ??= 0) + total;
-        }, 0)
+    getPrice(arr) {
+        let total = 0;
+
+        for (const id of arr) {
+            if (!this.priceMap[id]) continue;
+            total += this.priceMap[id]
+        }
+
+        return total / 100;
     }
 }
 

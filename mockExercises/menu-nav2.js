@@ -1,14 +1,21 @@
 function findByItemId(menu, target) {
-    const stack = [menu];
-    for (const menuEntry of stack) {
-        if (typeof menuEntry !== 'object') continue;
-        if (menuEntry['id'] === target) return {
-            id: menuEntry['id'],
-            price: Number(menuEntry['price'])
-        };
+    const stack = [[menu, null]];
 
-        for (const value of Object.values(menuEntry)) {
-            stack.push(value)
+    while (stack.length > 0) {
+        const [curr, parentPrice] = stack.pop();
+
+        const newPrice = curr.hasOwnProperty('price') && curr['price'] !== null
+            ? Number(curr['price'])
+            : parentPrice;
+
+        if (curr.hasOwnProperty('id') && curr['id'] === target) return { ...curr, price: newPrice };
+
+        if (typeof curr === 'object' && curr !== null) {
+            for (const key of Object.keys(curr)) {
+                if (curr[key] !== null && typeof curr[key] === 'object') {
+                    stack.push([curr[key], newPrice]);
+                };
+            }
         }
     }
 
@@ -71,4 +78,26 @@ console.log(findByItemId(menu1, targetId1));
 console.log(findByItemId(menu2, targetId2));
 console.log(findByItemId(menu3, targetId3));
 
-// console.log(calculateTotal(menu1, [42, 43, 43829]));
+const menu = {
+    id: "m1",
+    name: "Main Menu",
+    price: 15.00, // Default price for anything in this menu
+    burgers: {
+        id: "g1",
+        name: "Burgers",
+        price: null, // Inherits 15.00 from Main Menu
+        cheeseburger: { id: 101, name: "Cheeseburger", price: null }, // Should be 15.00
+        bacon_burger: { id: 102, name: "Bacon Burger", price: 18.00 }  // Should be 18.00
+    },
+    drinks: {
+        id: "g2",
+        name: "Drinks",
+        price: 3.00, // Overrides the Menu price of 15.00
+        soda: { id: 201, name: "Soda", price: null }, // Should be 3.00
+        milkshake: { id: 202, name: "Milkshake", price: 6.00 } // Should be 6.00
+    }
+};
+
+console.log(findByItemId(menu, 101));
+console.log(findByItemId(menu, 201));
+console.log(findByItemId(menu, 102));
