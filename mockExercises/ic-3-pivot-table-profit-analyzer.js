@@ -61,7 +61,7 @@ const queries = [
 
 const dw = new DataWarehouse(input1);
 
-console.log(dw.getMostProfitable(...queries[0]));
-console.log(dw.getMostProfitable(...queries[1])); // Returns bread, should be cheese
-console.log(dw.getMostProfitable(...queries[2]));
-console.log(dw.getMostProfitable(...queries[3]));
+console.log(dw.getMostProfitable(...queries[0])); // CA
+console.log(dw.getMostProfitable(...queries[1])); // cheese
+console.log(dw.getMostProfitable(...queries[2])); // blank
+console.log(dw.getMostProfitable(...queries[3])); // blank
